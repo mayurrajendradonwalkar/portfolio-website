@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mayur Donwalkar | UiPath Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { background-color: #0F172A; color: #F8FAFC; overflow-x: hidden; font-family: Inter, sans-serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0F172A; }
+        ::-webkit-scrollbar-thumb { background: #FA4616; border-radius: 4px; }
+        .glass-card { background: rgba(30,41,59,0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 30px rgba(0,0,0,0.5); }
+        .nav-link { position: relative; cursor: pointer; }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background-color: #FA4616; transition: width 0.3s; }
+        .nav-link:hover::after { width: 100%; }
+        .cursor { display: inline-block; width: 3px; background-color: #FA4616; animation: blink 1s infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+        .timeline-line { position: absolute; left: 50%; transform: translateX(-50%); width: 2px; height: 100%; background: linear-gradient(to bottom, #FA4616, #38BDF8); z-index: 0; }
+        @media(max-width:768px){ .timeline-line { left: 20px; } }
+        .quote-text { position: relative; font-style: italic; }
+        .quote-text::before { content: '\201C'; font-size: 3rem; color: #FA4616; position: absolute; top: -1.5rem; left: -1rem; opacity: 0.3; font-family: serif; }
+        #hireModal { display: none; position: fixed; inset: 0; z-index: 1000; align-items: center; justify-content: center; }
+        #hireModal.active { display: flex; }
+        .modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); }
+        .modal-box { position: relative; z-index: 10; background: linear-gradient(135deg,#0F172A 0%,#1E293B 100%); border: 1px solid rgba(250,70,22,0.4); border-radius: 1.25rem; padding: 2.5rem 3rem; min-width: 340px; box-shadow: 0 0 60px rgba(250,70,22,0.25); text-align: center; animation: modalIn 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+        @keyframes modalIn { from{opacity:0;transform:scale(0.85) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
+        .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1.4rem; line-height: 1; transition: color 0.2s; }
+        .modal-close:hover { color: #FA4616; }
+        .phone-display { font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 700; letter-spacing: 0.12em; background: linear-gradient(90deg,#FA4616,#f97316,#38BDF8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .phone-char { display: inline-block; opacity: 0; transform: translateY(10px); }
+        .scan-line { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg,transparent,#FA4616,transparent); animation: scan 2s linear infinite; }
+        @keyframes scan { 0%{top:0;opacity:1} 100%{top:100%;opacity:0} }
+        .copy-btn { padding: 0.5rem 1.5rem; border-radius: 9999px; font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; border: 1px solid rgba(250,70,22,0.4); background: rgba(250,70,22,0.1); color: #FA4616; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+        .copy-btn:hover { background: rgba(250,70,22,0.25); border-color: #FA4616; }
+        .corner { position: absolute; width: 12px; height: 12px; border-color: #FA4616; border-style: solid; opacity: 0.6; }
+        .corner-tl { top: 10px; left: 10px; border-width: 2px 0 0 2px; }
+        .corner-tr { top: 10px; right: 10px; border-width: 2px 2px 0 0; }
+        .corner-bl { bottom: 10px; left: 10px; border-width: 0 0 2px 2px; }
+        .corner-br { bottom: 10px; right: 10px; border-width: 0 2px 2px 0; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+    </style>
+</head>
+<body>
+
+<!-- Hire Me Modal -->
+<div id="hireModal">
+    <div class="modal-backdrop" onclick="closeModal()"></div>
+    <div class="modal-box">
+        <div class="scan-line"></div>
+        <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div><div class="corner corner-br"></div>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <div style="font-size:0.7rem;font-family:'JetBrains Mono',monospace;color:#FA4616;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;opacity:0.7">// CONTACT SIGNAL</div>
+        <div style="color:#94a3b8;font-size:0.85rem;font-family:'JetBrains Mono',monospace;margin-bottom:1.25rem">&gt; INITIATING CONNECTION...</div>
+        <div class="phone-display">
+            <span class="phone-char">4</span><span class="phone-char">1</span><span class="phone-char">6</span><span class="phone-char">-</span><span class="phone-char">8</span><span class="phone-char">2</span><span class="phone-char">1</span><span class="phone-char">-</span><span class="phone-char">8</span><span class="phone-char">0</span><span class="phone-char">2</span><span class="phone-char">7</span>
+        </div>
+        <div style="color:#64748b;font-size:0.7rem;font-family:'JetBrains Mono',monospace;margin-top:0.25rem;margin-bottom:1rem">DIRECT LINE</div>
+        <div style="display:flex;justify-content:center;gap:0.5rem;flex-wrap:wrap">
+            <a href="tel:4168218027" class="copy-btn">&#9990; Call Now</a>
+            <button class="copy-btn" onclick="copyNumber()">&#10064; <span id="copyLabel">Copy Number</span></button>
+        </div>
+        <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.1)">
+            <div style="font-size:0.7rem;font-family:'JetBrains Mono',monospace;color:#38BDF8;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem;opacity:0.7">// OR EMAIL ME</div>
+            <a href="mailto:mayurrajendradonwalkar@gmail.com" style="color:#38BDF8;font-family:'JetBrains Mono',monospace;font-size:0.8rem;word-break:break-all">mayurrajendradonwalkar@gmail.com</a>
+            <div style="margin-top:0.75rem">
+                <button class="copy-btn" style="border-color:rgba(56,189,248,0.4);background:rgba(56,189,248,0.1);color:#38BDF8" onclick="copyEmail()">&#10064; <span id="copyEmailLabel">Copy Email</span></button>
+            </div>
+        </div>
+        <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.1)">
+            <div style="font-size:0.7rem;font-family:'JetBrains Mono',monospace;color:#4ade80;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;opacity:0.7">// SCHEDULE A MEETING</div>
+            <a href="https://calendly.com/mayurrajendradonwalkar/30min" target="_blank" style="display:inline-block;padding:0.6rem 1.5rem;border-radius:9999px;background:linear-gradient(135deg,#00a86b,#00c97a);color:white;font-family:'JetBrains Mono',monospace;font-size:0.8rem;font-weight:600;text-decoration:none;box-shadow:0 0 20px rgba(0,200,100,0.3)">&#128197; Book a 30-min Call</a>
+        </div>
+    </div>
+</div>
+
+<!-- Nav -->
+<nav id="navbar" style="position:fixed;width:100%;top:0;z-index:50;transition:all 0.3s">
+    <div style="max-width:80rem;margin:0 auto;padding:0 1.5rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;height:5rem">
+            <div onclick="window.scrollTo(0,0)" style="font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;color:white;cursor:pointer">MD</div>
+            <div style="display:flex;align-items:center;gap:1.5rem">
+                <span onclick="scrollToSection('about')" class="nav-link" style="color:#cbd5e1;font-size:0.875rem;font-weight:500;padding:0.5rem">About</span>
+                <span onclick="scrollToSection('experience')" class="nav-link" style="color:#cbd5e1;font-size:0.875rem;font-weight:500;padding:0.5rem">Experience</span>
+                <span onclick="scrollToSection('stack')" class="nav-link" style="color:#cbd5e1;font-size:0.875rem;font-weight:500;padding:0.5rem">Tech Stack</span>
+                <span onclick="scrollToSection('contact')" style="background:#FA4616;color:white;padding:0.5rem 1rem;border-radius:9999px;font-size:0.875rem;font-weight:500;cursor:pointer">Contact Me</span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section style="position:relative;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;padding-top:5rem">
+    <div style="position:absolute;top:25%;left:25%;width:18rem;height:18rem;background:#FA4616;border-radius:50%;filter:blur(80px);opacity:0.15"></div>
+    <div style="position:absolute;top:33%;right:25%;width:18rem;height:18rem;background:#38BDF8;border-radius:50%;filter:blur(80px);opacity:0.15"></div>
+    <div style="position:relative;z-index:10;text-align:center;padding:0 1rem;max-width:64rem;margin:0 auto">
+        <div style="display:inline-block;margin-bottom:1rem;padding:0.25rem 1rem;border-radius:9999px;border:1px solid rgba(250,70,22,0.3);background:rgba(250,70,22,0.1);color:#FA4616;font-family:'JetBrains Mono',monospace;font-size:0.875rem;letter-spacing:0.1em">SYSTEM STATUS: ONLINE</div>
+        <h1 style="font-size:clamp(2.5rem,7vw,4.5rem);font-weight:700;margin-bottom:1.5rem;line-height:1.1">Hi, I'm <span style="background:linear-gradient(90deg,#FA4616,#facc15);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Mayur Donwalkar</span></h1>
+        <div style="font-size:clamp(1rem,3vw,1.5rem);color:#cbd5e1;font-family:'JetBrains Mono',monospace;height:2.5rem;margin-bottom:2rem">&gt; <span id="typewriter"></span><span class="cursor">&nbsp;</span></div>
+        <p style="font-size:1.1rem;color:#94a3b8;max-width:40rem;margin:0 auto 2.5rem;line-height:1.75">Transforming manual business processes into scalable automation solutions using UiPath and intelligent automation technologies.</p>
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:1rem">
+            <button onclick="openModal()" style="padding:1rem 2rem;background:#FA4616;color:white;border:none;border-radius:0.5rem;font-weight:700;font-size:1rem;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='#ea3a0a'" onmouseout="this.style.background='#FA4616'">&#9889; Hire Me</button>
+            <a href="https://drive.google.com/file/d/1m89T2FUwKO5TlFlrGj655ZX7QU-UCVgP/view?usp=drive_link" target="_blank" style="padding:1rem 2rem;background:rgba(30,41,59,0.7);color:white;border:1px solid rgba(255,255,255,0.2);border-radius:0.5rem;font-weight:700;font-size:1rem;text-decoration:none;transition:all 0.2s">&#8659; Download Resume</a>
+        </div>
+    </div>
+    <div style="position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);animation:bounce 1s infinite">
+        <span onclick="scrollToSection('stats')" style="color:#94a3b8;cursor:pointer;font-size:1.5rem">&#8964;</span>
+    </div>
+</section>
+
+<!-- Stats -->
+<section id="stats" style="padding:5rem 0">
+    <div style="max-width:80rem;margin:0 auto;padding:0 1.5rem">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem">
+            <div class="glass-card" style="padding:2rem;border-radius:1rem;text-align:center;border-top:4px solid #FA4616">
+                <div style="font-size:3rem;font-weight:700;color:white;display:flex;justify-content:center;align-items:baseline;gap:0.25rem"><span class="counter" data-target="20">0</span><span style="font-size:1.5rem;color:#FA4616">+</span></div>
+                <div style="color:#FA4616;font-family:'JetBrains Mono',monospace;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase">Projects Delivered</div>
+            </div>
+            <div class="glass-card" style="padding:2rem;border-radius:1rem;text-align:center;border-top:4px solid #38BDF8">
+                <div style="font-size:3rem;font-weight:700;color:white;display:flex;justify-content:center;align-items:baseline;gap:0.25rem"><span class="counter" data-target="15">0</span><span style="font-size:1.5rem;color:#38BDF8">+</span></div>
+                <div style="color:#38BDF8;font-family:'JetBrains Mono',monospace;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase">Hours Saved</div>
+            </div>
+            <div class="glass-card" style="padding:2rem;border-radius:1rem;text-align:center;border-top:4px solid #a855f7">
+                <div style="font-size:3rem;font-weight:700;color:white;display:flex;justify-content:center;align-items:baseline;gap:0.25rem"><span class="counter" data-target="3">0</span><span style="font-size:1.5rem;color:#a855f7">+</span></div>
+                <div style="color:#a855f7;font-family:'JetBrains Mono',monospace;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase">Years Experience</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About -->
+<section id="about" style="padding:5rem 0">
+    <div style="max-width:80rem;margin:0 auto;padding:0 1.5rem">
+        <div class="glass-card" style="border-radius:1rem;padding:2.5rem;margin-bottom:3rem">
+            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem">
+                <div style="width:3rem;height:3rem;border-radius:50%;background:rgba(250,70,22,0.2);display:flex;align-items:center;justify-content:center;font-size:1.5rem">&#128104;&#8205;&#128187;</div>
+                <h2 style="font-size:2rem;font-weight:700;color:white">About Me</h2>
+            </div>
+            <p style="color:#cbd5e1;font-size:1.1rem;line-height:1.75;margin-bottom:1rem">I'm a UiPath Developer who genuinely believes every manual process is just an automation waiting to happen.</p>
+            <p style="color:#94a3b8;line-height:1.75;margin-bottom:1.5rem">I build bots for a living and honestly, I love it. There's something deeply satisfying about watching a process that used to eat hours of someone's day just run itself in minutes.</p>
+            <div style="padding:1.5rem;background:rgba(250,70,22,0.1);border-left:4px solid #FA4616;border-radius:0 0.5rem 0.5rem 0;margin-bottom:1.5rem">
+                <p class="quote-text" style="color:#FA4616;font-size:1.1rem;font-weight:500;padding-left:1rem">Every manual process is just an automation waiting to happen.</p>
+            </div>
+            <div style="display:flex;gap:1rem">
+                <a href="https://www.linkedin.com/in/mayur-donwalkar/" target="_blank" style="width:2.5rem;height:2.5rem;border-radius:50%;background:#0077b5;display:flex;align-items:center;justify-content:center;color:white;text-decoration:none;font-size:1rem">in</a>
+                <a href="https://github.com/mayurrajendradonwalkar" target="_blank" style="width:2.5rem;height:2.5rem;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;color:white;text-decoration:none">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+                </a>
+                <a href="mailto:mayurrajendradonwalkar@gmail.com" style="width:2.5rem;height:2.5rem;border-radius:50%;background:#ef4444;display:flex;align-items:center;justify-content:center;color:white;text-decoration:none;font-size:1rem">&#9993;</a>
+            </div>
+        </div>
+
+        <h3 style="font-size:1.5rem;font-weight:700;color:white;margin-bottom:0.5rem;border-left:4px solid #FA4616;padding-left:1rem">UiPath Automation Expertise</h3>
+        <p style="color:#94a3b8;font-size:0.875rem;margin-bottom:2rem;padding-left:1.25rem">Domains I've automated using UiPath</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem">
+            <div class="expertise-card" style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1.25rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);border:1px solid transparent;transition:all 0.3s;cursor:default" onmouseover="this.style.background='rgba(250,70,22,0.1)';this.style.borderColor='rgba(250,70,22,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='transparent'">
+                <span style="font-size:2rem">&#127760;</span>
+                <span style="color:#e2e8f0;font-size:0.8rem;font-weight:500;text-align:center">Web Automation</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1.25rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);border:1px solid transparent;transition:all 0.3s;cursor:default" onmouseover="this.style.background='rgba(74,222,128,0.1)';this.style.borderColor='rgba(74,222,128,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='transparent'">
+                <span style="font-size:2rem">&#128196;</span>
+                <span style="color:#e2e8f0;font-size:0.8rem;font-weight:500;text-align:center">Excel Automation</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1.25rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);border:1px solid transparent;transition:all 0.3s;cursor:default" onmouseover="this.style.background='rgba(56,189,248,0.1)';this.style.borderColor='rgba(56,189,248,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='transparent'">
+                <span style="font-size:2rem">&#128140;</span>
+                <span style="color:#e2e8f0;font-size:0.8rem;font-weight:500;text-align:center">Email Automation</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1.25rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);border:1px solid transparent;transition:all 0.3s;cursor:default" onmouseover="this.style.background='rgba(248,113,113,0.1)';this.style.borderColor='rgba(248,113,113,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='transparent'">
+                <span style="font-size:2rem">&#128209;</span>
+                <span style="color:#e2e8f0;font-size:0.8rem;font-weight:500;text-align:center">PDF Automation</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1.25rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);border:1px solid transparent;transition:all 0.3s;cursor:default" onmouseover="this.style.background='rgba(250,204,21,0.1)';this.style.borderColor='rgba(250,204,21,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='transparent'">
+                <span style="font-size:2rem">&#128187;</span>
+                <span style="color:#e2e8f0;font-size:0.8rem;font-weight:500;text-align:center">SAP Automation</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1.25rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);border:1px solid transparent;transition:all 0.3s;cursor:default" onmouseover="this.style.background='rgba(168,85,247,0.1)';this.style.borderColor='rgba(168,85,247,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='transparent'">
+                <span style="font-size:2rem">&#128274;</span>
+                <span style="color:#e2e8f0;font-size:0.8rem;font-weight:500;text-align:center">Citrix Automation</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1.25rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);border:1px solid transparent;transition:all 0.3s;cursor:default" onmouseover="this.style.background='rgba(244,114,182,0.1)';this.style.borderColor='rgba(244,114,182,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='transparent'">
+                <span style="font-size:2rem">&#128268;</span>
+                <span style="color:#e2e8f0;font-size:0.8rem;font-weight:500;text-align:center">API Automation</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1.25rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);border:1px solid transparent;transition:all 0.3s;cursor:default" onmouseover="this.style.background='rgba(251,146,60,0.1)';this.style.borderColor='rgba(251,146,60,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='transparent'">
+                <span style="font-size:2rem">&#128421;</span>
+                <span style="color:#e2e8f0;font-size:0.8rem;font-weight:500;text-align:center">Desktop Automation</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1.25rem;border-radius:0.75rem;background:rgba(255,255,255,0.05);border:1px solid transparent;transition:all 0.3s;cursor:default" onmouseover="this.style.background='rgba(45,212,191,0.1)';this.style.borderColor='rgba(45,212,191,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='transparent'">
+                <span style="font-size:2rem">&#128247;</span>
+                <span style="color:#e2e8f0;font-size:0.8rem;font-weight:500;text-align:center">Screen Scraping</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Experience -->
+<section id="experience" style="padding:5rem 0;background:rgba(15,23,42,0.5)">
+    <div style="max-width:72rem;margin:0 auto;padding:0 1.5rem">
+        <div style="text-align:center;margin-bottom:4rem">
+            <h2 style="font-size:2.25rem;font-weight:700;color:white;margin-bottom:1rem">Work Experience</h2>
+            <div style="width:5rem;height:4px;background:#FA4616;margin:0 auto;border-radius:9999px"></div>
+        </div>
+        <div style="position:relative;padding-left:2rem">
+            <!-- Vertical line -->
+            <div style="position:absolute;left:0.65rem;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,#FA4616,#38BDF8,#a855f7)"></div>
+
+            <!-- Job 1 -->
+            <div class="gs-reveal" style="position:relative;margin-bottom:3rem;padding-left:2.5rem">
+                <div style="position:absolute;left:-0.45rem;top:1.25rem;width:1.1rem;height:1.1rem;border-radius:50%;background:#FA4616;border:3px solid #0F172A;box-shadow:0 0 10px rgba(250,70,22,0.6)"></div>
+                <div class="glass-card" style="padding:1.5rem;border-radius:0.75rem;border-left:4px solid #FA4616;transition:transform 0.3s" onmouseover="this.style.transform='translateX(6px)'" onmouseout="this.style.transform='translateX(0)'">
+                    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
+                        <span style="font-family:'JetBrains Mono',monospace;color:#FA4616;font-size:0.8rem;font-weight:700">Sep 2024 – Dec 2024</span>
+                        <span style="font-size:0.7rem;background:rgba(250,70,22,0.15);color:#FA4616;padding:0.2rem 0.6rem;border-radius:9999px;font-family:'JetBrains Mono',monospace">Current</span>
+                    </div>
+                    <h3 style="font-weight:700;color:white;font-size:1.25rem;margin:0 0 0.25rem">Intern — Python Automation</h3>
+                    <h4 style="color:#94a3b8;font-weight:600;margin:0 0 0.75rem;font-size:0.95rem">Simeio Solutions</h4>
+                    <p style="font-size:0.875rem;color:#cbd5e1;line-height:1.75;margin:0">Built Python-based automation for Excel processing using openpyxl, developed Excel-to-JSON transformation pipelines, and automated multi-environment deployments using Ansible.</p>
+                </div>
+            </div>
+
+            <!-- Job 2 -->
+            <div class="gs-reveal" style="position:relative;margin-bottom:3rem;padding-left:2.5rem">
+                <div style="position:absolute;left:-0.45rem;top:1.25rem;width:1.1rem;height:1.1rem;border-radius:50%;background:#38BDF8;border:3px solid #0F172A;box-shadow:0 0 10px rgba(56,189,248,0.6)"></div>
+                <div class="glass-card" style="padding:1.5rem;border-radius:0.75rem;border-left:4px solid #38BDF8;transition:transform 0.3s" onmouseover="this.style.transform='translateX(6px)'" onmouseout="this.style.transform='translateX(0)'">
+                    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
+                        <span style="font-family:'JetBrains Mono',monospace;color:#38BDF8;font-size:0.8rem;font-weight:700">Dec 2021 – Dec 2022</span>
+                    </div>
+                    <h3 style="font-weight:700;color:white;font-size:1.25rem;margin:0 0 0.25rem">Software Engineer — RPA UiPath Developer</h3>
+                    <h4 style="color:#94a3b8;font-weight:600;margin:0 0 0.75rem;font-size:0.95rem">JPMorgan Chase &amp; Co</h4>
+                    <p style="font-size:0.875rem;color:#cbd5e1;line-height:1.75;margin:0">Led the migration from Automation Anywhere to UiPath, implemented the Dispatcher–Performer framework, and used Jenkins for automated deployment across environments.</p>
+                </div>
+            </div>
+
+            <!-- Job 3 -->
+            <div class="gs-reveal" style="position:relative;margin-bottom:1rem;padding-left:2.5rem">
+                <div style="position:absolute;left:-0.45rem;top:1.25rem;width:1.1rem;height:1.1rem;border-radius:50%;background:#a855f7;border:3px solid #0F172A;box-shadow:0 0 10px rgba(168,85,247,0.6)"></div>
+                <div class="glass-card" style="padding:1.5rem;border-radius:0.75rem;border-left:4px solid #a855f7;transition:transform 0.3s" onmouseover="this.style.transform='translateX(6px)'" onmouseout="this.style.transform='translateX(0)'">
+                    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
+                        <span style="font-family:'JetBrains Mono',monospace;color:#a855f7;font-size:0.8rem;font-weight:700">Aug 2019 – Dec 2021</span>
+                    </div>
+                    <h3 style="font-weight:700;color:white;font-size:1.25rem;margin:0 0 0.25rem">Application Engineer — RPA UiPath Developer</h3>
+                    <h4 style="color:#94a3b8;font-weight:600;margin:0 0 0.75rem;font-size:0.95rem">Worldline Pvt Ltd</h4>
+                    <p style="font-size:0.875rem;color:#cbd5e1;line-height:1.75;margin:0">Delivered 13+ enterprise automation solutions, worked with REFramework across SAP &amp; Web environments, and automated email processing &amp; data scraping workflows.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tech Stack -->
+<section id="stack" style="padding:5rem 0">
+    <div style="max-width:80rem;margin:0 auto;padding:0 1.5rem">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:4rem">
+            <div>
+                <h2 style="font-size:1.875rem;font-weight:700;color:white;margin-bottom:2rem">&#9889; Tech Stack</h2>
+                <div style="display:flex;flex-direction:column;gap:1.5rem">
+                    <div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:0.25rem"><span style="color:white;font-weight:500">UiPath (REFramework)</span><span style="color:#FA4616;font-size:0.875rem">95%</span></div>
+                        <div style="background:#374151;border-radius:9999px;height:0.625rem"><div class="skill-bar" data-width="95%" style="width:0%;background:#FA4616;height:0.625rem;border-radius:9999px"></div></div>
+                    </div>
+                    <div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:0.25rem"><span style="color:white;font-weight:500">C# &amp; .NET</span><span style="color:#38BDF8;font-size:0.875rem">85%</span></div>
+                        <div style="background:#374151;border-radius:9999px;height:0.625rem"><div class="skill-bar" data-width="85%" style="width:0%;background:#38BDF8;height:0.625rem;border-radius:9999px"></div></div>
+                    </div>
+                    <div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:0.25rem"><span style="color:white;font-weight:500">SQL &amp; Databases</span><span style="color:#4ade80;font-size:0.875rem">80%</span></div>
+                        <div style="background:#374151;border-radius:9999px;height:0.625rem"><div class="skill-bar" data-width="80%" style="width:0%;background:#4ade80;height:0.625rem;border-radius:9999px"></div></div>
+                    </div>
+                    <div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:0.25rem"><span style="color:white;font-weight:500">Python</span><span style="color:#facc15;font-size:0.875rem">75%</span></div>
+                        <div style="background:#374151;border-radius:9999px;height:0.625rem"><div class="skill-bar" data-width="75%" style="width:0%;background:#facc15;height:0.625rem;border-radius:9999px"></div></div>
+                    </div>
+                    <div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:0.25rem"><span style="color:white;font-weight:500">Orchestrator / Cloud</span><span style="color:#a855f7;font-size:0.875rem">85%</span></div>
+                        <div style="background:#374151;border-radius:9999px;height:0.625rem"><div class="skill-bar" data-width="85%" style="width:0%;background:#a855f7;height:0.625rem;border-radius:9999px"></div></div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h2 style="font-size:1.875rem;font-weight:700;color:white;margin-bottom:2rem">&#127942; Certifications</h2>
+                <div style="display:flex;flex-direction:column;gap:1rem">
+                    <div class="glass-card" style="padding:1.5rem;border-radius:0.75rem;border-left:4px solid #ef4444">
+                        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                            <div><h3 style="font-size:1.1rem;font-weight:700;color:white">Generative AI Fundamentals</h3><p style="color:#94a3b8;font-size:0.875rem">Databricks</p></div>
+                            <span style="font-size:1.5rem">&#127942;</span>
+                        </div>
+                        <div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid #374151;display:flex;justify-content:space-between;align-items:center">
+                            <span style="font-family:'JetBrains Mono',monospace;color:#64748b;font-size:0.75rem">ID: 175800690</span>
+                            <span style="font-size:0.75rem;background:rgba(239,68,68,0.1);color:#f87171;padding:0.25rem 0.5rem;border-radius:0.25rem">Academy Accreditation</span>
+                        </div>
+                    </div>
+                    <div class="glass-card" style="padding:1.5rem;border-radius:0.75rem;border-left:4px solid #3b82f6">
+                        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                            <div><h3 style="font-size:1.1rem;font-weight:700;color:white">Data Analytics &amp; Visualization</h3><p style="color:#94a3b8;font-size:0.875rem">Accenture North America (Forage)</p></div>
+                            <span style="font-size:1.5rem">&#128202;</span>
+                        </div>
+                        <div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid #374151;display:flex;justify-content:space-between;align-items:center">
+                            <span style="font-family:'JetBrains Mono',monospace;color:#64748b;font-size:0.75rem">ID: Du3wEAtLc5yM8QWks</span>
+                            <span style="font-size:0.75rem;background:rgba(59,130,246,0.1);color:#93c5fd;padding:0.25rem 0.5rem;border-radius:0.25rem">Job Simulation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact -->
+<section id="contact" style="padding:5rem 0">
+    <div style="max-width:48rem;margin:0 auto;padding:0 1.5rem">
+        <div class="glass-card" style="border-radius:1rem;padding:3rem;border:1px solid #374151">
+            <div style="text-align:center;margin-bottom:2.5rem">
+                <h2 style="font-size:1.875rem;font-weight:700;color:white;margin-bottom:1rem">Let's Automate Something</h2>
+                <p style="color:#94a3b8">Have a process that needs automating? Send me a signal.</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:1.5rem">
+                <div>
+                    <label style="display:block;font-size:0.875rem;font-weight:500;color:#cbd5e1;margin-bottom:0.5rem">Your Email</label>
+                    <input type="email" id="femail" placeholder="john@example.com" style="width:100%;background:rgba(30,41,59,0.5);border:1px solid #4b5563;border-radius:0.5rem;padding:0.75rem 1rem;color:white;font-size:1rem;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#FA4616'" onblur="this.style.borderColor='#4b5563'">
+                </div>
+                <div>
+                    <label style="display:block;font-size:0.875rem;font-weight:500;color:#cbd5e1;margin-bottom:0.5rem">Subject</label>
+                    <input type="text" id="fsubject" placeholder="Let's work together" style="width:100%;background:rgba(30,41,59,0.5);border:1px solid #4b5563;border-radius:0.5rem;padding:0.75rem 1rem;color:white;font-size:1rem;outline:none;box-sizing:border-box" onfocus="this.style.borderColor='#FA4616'" onblur="this.style.borderColor='#4b5563'">
+                </div>
+                <div>
+                    <label style="display:block;font-size:0.875rem;font-weight:500;color:#cbd5e1;margin-bottom:0.5rem">Message</label>
+                    <textarea id="fmessage" rows="4" placeholder="Tell me about your project..." style="width:100%;background:rgba(30,41,59,0.5);border:1px solid #4b5563;border-radius:0.5rem;padding:0.75rem 1rem;color:white;font-size:1rem;outline:none;resize:vertical;box-sizing:border-box" onfocus="this.style.borderColor='#FA4616'" onblur="this.style.borderColor='#4b5563'"></textarea>
+                </div>
+                <button id="sendBtn" onclick="sendEmail()" style="width:100%;background:linear-gradient(90deg,#FA4616,#dc2626);color:white;font-weight:700;padding:1rem;border:none;border-radius:0.5rem;font-size:1rem;cursor:pointer;transition:all 0.2s">Send Message</button>
+                <p id="formStatus" style="display:none;text-align:center;font-size:0.875rem;margin-top:0.5rem"></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer style="background:#020617;padding:2rem 0;border-top:1px solid #1e293b">
+    <div style="max-width:80rem;margin:0 auto;padding:0 1.5rem;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem">
+        <div style="color:#64748b;font-size:0.875rem">&copy; 2024 Mayur Donwalkar. All rights reserved.</div>
+        <div style="display:flex;gap:1.5rem">
+            <a href="https://www.linkedin.com/in/mayur-donwalkar/" target="_blank" style="color:#94a3b8;text-decoration:none;font-size:1.25rem" onmouseover="this.style.color='white'" onmouseout="this.style.color='#94a3b8'">in</a>
+            <a href="mailto:mayurrajendradonwalkar@gmail.com" style="color:#94a3b8;text-decoration:none;font-size:1.25rem" onmouseover="this.style.color='white'" onmouseout="this.style.color='#94a3b8'">&#9993;</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    emailjs.init("9YHXyrXrRjCPoVf3W");
+
+    function scrollToSection(id) {
+        var el = document.getElementById(id);
+        if (el) { el.scrollIntoView({ behavior: "smooth" }); }
+    }
+
+    var words = ["UiPath Developer", "Automation Engineer", "Bot Builder", "Problem Solver"];
+    var wi = 0;
+    var isDeleting = false;
+    function typeWriter() {
+        var el = document.getElementById("typewriter");
+        var word = words[wi];
+        var cur = el.innerText;
+        if (!isDeleting && cur !== word) {
+            el.innerText = word.substring(0, cur.length + 1);
+            setTimeout(typeWriter, 100);
+        } else if (!isDeleting && cur === word) {
+            isDeleting = true;
+            setTimeout(typeWriter, 2000);
+        } else if (isDeleting && cur !== "") {
+            el.innerText = word.substring(0, cur.length - 1);
+            setTimeout(typeWriter, 50);
+        } else {
+            isDeleting = false;
+            wi = (wi + 1) % words.length;
+            setTimeout(typeWriter, 500);
+        }
+    }
+    setTimeout(typeWriter, 1000);
+
+    window.addEventListener("scroll", function() {
+        var nav = document.getElementById("navbar");
+        if (window.scrollY > 50) {
+            nav.style.background = "rgba(15,23,42,0.9)";
+            nav.style.backdropFilter = "blur(10px)";
+            nav.style.boxShadow = "0 4px 20px rgba(0,0,0,0.5)";
+        } else {
+            nav.style.background = "transparent";
+            nav.style.backdropFilter = "none";
+            nav.style.boxShadow = "none";
+        }
+    });
+
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.utils.toArray(".counter").forEach(function(c) {
+        gsap.to(c, { innerHTML: parseInt(c.dataset.target), duration: 2, snap: { innerHTML: 1 }, scrollTrigger: { trigger: c, start: "top 85%" } });
+    });
+    gsap.utils.toArray(".skill-bar").forEach(function(b) {
+        gsap.to(b, { width: b.dataset.width, duration: 1.5, ease: "power2.out", scrollTrigger: { trigger: b, start: "top 90%" } });
+    });
+    gsap.utils.toArray(".gs-reveal").forEach(function(el) {
+        gsap.from(el, { y: 50, opacity: 0, duration: 1, scrollTrigger: { trigger: el, start: "top 85%" } });
+    });
+
+    function sendEmail() {
+        var email   = document.getElementById("femail").value.trim();
+        var subject = document.getElementById("fsubject").value.trim();
+        var body    = document.getElementById("fmessage").value.trim();
+        var status  = document.getElementById("formStatus");
+        var btn     = document.getElementById("sendBtn");
+
+        status.style.display = "none";
+
+        if (!email || !subject || !body) {
+            status.innerText = "Please fill in all fields.";
+            status.style.display = "block";
+            status.style.color = "#facc15";
+            return;
+        }
+
+        btn.innerText = "Sending...";
+        btn.disabled = true;
+
+        emailjs.send("service_gdjtsjg", "template_p55r3qe", {
+            name: email,
+            body: body,
+            subject: subject,
+            reply_to: email
+        }).then(function(res) {
+            console.log("OK", res);
+            status.innerText = "Message sent! I'll get back to you soon.";
+            status.style.display = "block";
+            status.style.color = "#4ade80";
+            document.getElementById("femail").value = "";
+            document.getElementById("fsubject").value = "";
+            document.getElementById("fmessage").value = "";
+            btn.innerText = "Send Message";
+            btn.disabled = false;
+        }, function(err) {
+            console.log("ERR", err);
+            status.innerText = "Error: " + JSON.stringify(err);
+            status.style.display = "block";
+            status.style.color = "#f87171";
+            btn.innerText = "Send Message";
+            btn.disabled = false;
+        });
+    }
+
+    function openModal() {
+        document.getElementById("hireModal").classList.add("active");
+        document.body.style.overflow = "hidden";
+        var chars = document.querySelectorAll(".phone-char");
+        for (var i = 0; i < chars.length; i++) {
+            (function(c, idx) {
+                c.style.opacity = "0";
+                c.style.transform = "translateY(10px)";
+                setTimeout(function() {
+                    c.style.transition = "all 0.25s cubic-bezier(0.34,1.56,0.64,1)";
+                    c.style.opacity = "1";
+                    c.style.transform = "translateY(0)";
+                }, 300 + idx * 80);
+            })(chars[i], i);
+        }
+    }
+
+    function closeModal() {
+        document.getElementById("hireModal").classList.remove("active");
+        document.body.style.overflow = "";
+    }
+
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") { closeModal(); }
+    });
+
+    function copyNumber() {
+        navigator.clipboard.writeText("416-821-8027").then(function() {
+            var l = document.getElementById("copyLabel");
+            l.innerText = "Copied!";
+            setTimeout(function() { l.innerText = "Copy Number"; }, 2000);
+        }, function() {
+            prompt("Copy this number:", "416-821-8027");
+        });
+    }
+
+    function copyEmail() {
+        navigator.clipboard.writeText("mayurrajendradonwalkar@gmail.com").then(function() {
+            var l = document.getElementById("copyEmailLabel");
+            l.innerText = "Copied!";
+            setTimeout(function() { l.innerText = "Copy Email"; }, 2000);
+        }, function() {
+            prompt("Copy this email:", "mayurrajendradonwalkar@gmail.com");
+        });
+    }
+</script>
+</body>
+</html>
