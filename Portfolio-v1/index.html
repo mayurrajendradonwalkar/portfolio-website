@@ -62,9 +62,47 @@
         .stat-num { font-size: 3rem; font-weight: 700; color: white; display: flex; justify-content: center; align-items: baseline; gap: 0.25rem; }
         .stat-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.5rem; }
 
-        /* EXPERTISE GRID */
-        .exp-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(140px,1fr)); gap: 1rem; }
-        .exp-card { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1.25rem; border-radius: 0.75rem; background: rgba(255,255,255,0.05); border: 1px solid transparent; transition: all 0.3s; cursor: default; text-align: center; font-size: 0.8rem; font-weight: 500; color: #e2e8f0; }
+        /* FLIP CARDS — CHANGE 3 */
+        .flip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
+        .flip-card { height: 180px; perspective: 1200px; cursor: pointer; }
+        .flip-inner {
+            position: relative; width: 100%; height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .flip-card:hover .flip-inner { transform: rotateY(180deg); }
+        .flip-front, .flip-back {
+            position: absolute; inset: 0; border-radius: 0.75rem;
+            backface-visibility: hidden; -webkit-backface-visibility: hidden;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center; padding: 1rem;
+        }
+        .flip-front {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            gap: 0.5rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .flip-card:hover .flip-front {
+            box-shadow: 0 0 28px rgba(250,70,22,0.15);
+        }
+        .flip-back {
+            transform: rotateY(180deg);
+            text-align: center;
+            padding: 1.1rem;
+            gap: 0.4rem;
+        }
+        .flip-front .fname { font-size: 0.82rem; font-weight: 600; color: #e2e8f0; text-align: center; }
+        .flip-tag { font-size: 0.58rem; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.65; }
+        .back-company {
+            font-size: 0.72rem;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 700;
+        }
 
         /* TIMELINE */
         .timeline { position: relative; padding-left: 2rem; }
@@ -108,12 +146,12 @@
         <button class="modal-close" onclick="closeModal()">&times;</button>
 
         <div style="font-size:0.65rem;font-family:'JetBrains Mono',monospace;color:#FA4616;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.6rem;opacity:0.7">// CONTACT SIGNAL</div>
-        <div style="color:#94a3b8;font-size:0.8rem;font-family:'JetBrains Mono',monospace;margin-bottom:1.2rem">&gt; INITIATING CONNECTION...</div>
+        <div style="color:#94a3b8;font-size:0.8rem;font-family:'JetBrains Mono',monospace;margin-bottom:0.1rem">&gt; INITIATING CONNECTION...</div>
 
         <div class="phone-display">
             <span class="phone-char">4</span><span class="phone-char">1</span><span class="phone-char">6</span><span class="phone-char">-</span><span class="phone-char">8</span><span class="phone-char">2</span><span class="phone-char">1</span><span class="phone-char">-</span><span class="phone-char">8</span><span class="phone-char">0</span><span class="phone-char">2</span><span class="phone-char">7</span>
         </div>
-        <div style="color:#64748b;font-size:0.65rem;font-family:'JetBrains Mono',monospace;margin:0.3rem 0 1rem">DIRECT LINE</div>
+        <div style="color:#64748b;font-size:0.65rem;font-family:'JetBrains Mono',monospace;margin:0 0 1rem">DIRECT LINE</div>
 
         <div style="display:flex;justify-content:center;gap:0.5rem;flex-wrap:wrap">
             <a href="tel:4168218027" class="cbtn cbtn-orange">&#9990; Call Now</a>
@@ -168,9 +206,10 @@
             Transforming manual business processes into scalable automation solutions using UiPath and intelligent automation technologies.
         </p>
 
+        <!-- CHANGE 1: "Hire Me" → "Let's Connect"  |  CHANGE 2: "Download Resume" → "View Resume" -->
         <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:1rem">
-            <button onclick="openModal()" style="padding:0.9rem 2rem;background:#FA4616;color:white;border:2px solid rgba(255,255,255,0.25);border-radius:0.5rem;font-weight:700;font-size:1rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;box-shadow:0 0 0 4px rgba(15,23,42,0.8), 0 4px 20px rgba(250,70,22,0.5)" onmouseover="this.style.background='#e03d0a'" onmouseout="this.style.background='#FA4616'">&#9889; Hire Me</button>
-            <a href="https://drive.google.com/file/d/1m89T2FUwKO5TlFlrGj655ZX7QU-UCVgP/view?usp=drive_link" target="_blank" style="padding:0.9rem 2rem;background:rgba(30,41,59,0.8);color:white;border:1px solid rgba(255,255,255,0.15);border-radius:0.5rem;font-weight:700;font-size:1rem;text-decoration:none">&#128190; Download Resume</a>
+            <button onclick="openModal()" style="padding:0.9rem 2rem;background:transparent;color:#FA4616;border:2px solid #FA4616;border-radius:0.5rem;font-weight:700;font-size:1rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.25s;letter-spacing:0.03em" onmouseover="this.style.background='rgba(250,70,22,0.1)'" onmouseout="this.style.background='transparent'">Let's Connect</button>
+            <a href="https://drive.google.com/file/d/1m89T2FUwKO5TlFlrGj655ZX7QU-UCVgP/view?usp=drive_link" target="_blank" style="padding:0.9rem 2rem;background:rgba(30,41,59,0.8);color:white;border:1px solid rgba(255,255,255,0.15);border-radius:0.5rem;font-weight:700;font-size:1rem;text-decoration:none">&#128190; View Resume</a>
         </div>
     </div>
 
@@ -188,7 +227,7 @@
                 <div class="stat-label" style="color:#FA4616">Projects Delivered</div>
             </div>
             <div class="glass stat-card" style="border-top:4px solid #38BDF8">
-                <div class="stat-num"><span id="c2">0</span><span style="font-size:1.5rem;color:#38BDF8">K+</span></div>
+                <div class="stat-num"><span id="c2">0</span><span style="font-size:1.5rem;color:#38BDF8">+</span></div>
                 <div class="stat-label" style="color:#38BDF8">Hours Saved</div>
             </div>
             <div class="glass stat-card" style="border-top:4px solid #a855f7">
@@ -222,37 +261,12 @@
         </div>
 
         <h3 style="font-size:1.4rem;font-weight:700;color:white;margin-bottom:0.5rem;border-left:4px solid #FA4616;padding-left:1rem">UiPath Automation Expertise</h3>
-        <p style="color:#64748b;font-size:0.85rem;margin-bottom:1.75rem;padding-left:1.25rem">Hover a card to see what I've built</p>
+        <p style="color:#64748b;font-size:0.85rem;margin-bottom:1.75rem;padding-left:1.25rem">Hover a card to see where I built it</p>
 
-        <style>
-            .flip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
-            .flip-card { height: 160px; perspective: 1000px; cursor: pointer; }
-            .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.55s cubic-bezier(0.4,0.2,0.2,1); transform-style: preserve-3d; }
-            .flip-card:hover .flip-inner { transform: rotateY(180deg); }
-            .flip-front, .flip-back { position: absolute; inset: 0; border-radius: 0.75rem; backface-visibility: hidden; -webkit-backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem; }
-            .flip-front { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); gap: 0.6rem; }
-            .flip-back { transform: rotateY(180deg); font-size: 0.78rem; color: white; line-height: 1.6; text-align: center; font-family: 'JetBrains Mono', monospace; }
-            .flip-front .fname { font-size: 0.82rem; font-weight: 600; color: #e2e8f0; text-align: center; }
-            .flip-tag { font-size: 0.6rem; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.4rem; opacity: 0.7; }
-        </style>
-
+        <!-- CHANGE 3: Flip cards with real work experience on the back -->
         <div class="flip-grid">
 
-            <div class="flip-card">
-                <div class="flip-inner">
-                    <div class="flip-front" style="border-color:rgba(56,189,248,0.25)">
-                        <span style="font-size:2rem">&#127760;</span>
-                        <span class="fname">Web Automation</span>
-                        <span class="flip-tag" style="color:#38BDF8">hover to explore</span>
-                    </div>
-                    <div class="flip-back" style="background:linear-gradient(135deg,rgba(56,189,248,0.15),rgba(30,41,59,0.95));border:1px solid rgba(56,189,248,0.3)">
-                        <div style="font-size:1.5rem;margin-bottom:0.5rem">&#127760;</div>
-                        Automating browser-based workflows using UiPath's Modern Design activities &amp; Chromium integration
-                        <span class="flip-tag" style="color:#38BDF8;margin-top:0.5rem">Selenium &bull; UI Activities</span>
-                    </div>
-                </div>
-            </div>
-
+            <!-- EXCEL -->
             <div class="flip-card">
                 <div class="flip-inner">
                     <div class="flip-front" style="border-color:rgba(74,222,128,0.25)">
@@ -260,14 +274,31 @@
                         <span class="fname">Excel Automation</span>
                         <span class="flip-tag" style="color:#4ade80">hover to explore</span>
                     </div>
-                    <div class="flip-back" style="background:linear-gradient(135deg,rgba(74,222,128,0.15),rgba(30,41,59,0.95));border:1px solid rgba(74,222,128,0.3)">
-                        <div style="font-size:1.5rem;margin-bottom:0.5rem">&#128196;</div>
-                        Reading, writing &amp; transforming Excel workbooks with complex formulas, pivot tables &amp; data validation
-                        <span class="flip-tag" style="color:#4ade80;margin-top:0.5rem">Workbook &bull; DataTable</span>
+                    <div class="flip-back" style="background:linear-gradient(135deg,rgba(74,222,128,0.12),rgba(15,23,42,0.97));border:1px solid rgba(74,222,128,0.3)">
+                        <span style="font-size:2.2rem">&#128196;</span>
+                        <span class="back-company" style="background:rgba(74,222,128,0.15);color:#4ade80">Worldline &amp; Simeio</span>
+                        <span class="flip-tag" style="color:#4ade80">Workbook · DataTable · openpyxl</span>
                     </div>
                 </div>
             </div>
 
+            <!-- WEB -->
+            <div class="flip-card">
+                <div class="flip-inner">
+                    <div class="flip-front" style="border-color:rgba(56,189,248,0.25)">
+                        <span style="font-size:2rem">&#127760;</span>
+                        <span class="fname">Web Automation</span>
+                        <span class="flip-tag" style="color:#38BDF8">hover to explore</span>
+                    </div>
+                    <div class="flip-back" style="background:linear-gradient(135deg,rgba(56,189,248,0.12),rgba(15,23,42,0.97));border:1px solid rgba(56,189,248,0.3)">
+                        <span style="font-size:2.2rem">&#127760;</span>
+                        <span class="back-company" style="background:rgba(56,189,248,0.15);color:#38BDF8">JPMorgan &amp; Worldline</span>
+                        <span class="flip-tag" style="color:#38BDF8">Modern Activities · Chromium</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EMAIL -->
             <div class="flip-card">
                 <div class="flip-inner">
                     <div class="flip-front" style="border-color:rgba(250,70,22,0.25)">
@@ -275,29 +306,15 @@
                         <span class="fname">Email Automation</span>
                         <span class="flip-tag" style="color:#FA4616">hover to explore</span>
                     </div>
-                    <div class="flip-back" style="background:linear-gradient(135deg,rgba(250,70,22,0.15),rgba(30,41,59,0.95));border:1px solid rgba(250,70,22,0.3)">
-                        <div style="font-size:1.5rem;margin-bottom:0.5rem">&#128140;</div>
-                        Automated email triaging, extraction &amp; routing via Outlook &amp; IMAP with attachment processing
-                        <span class="flip-tag" style="color:#FA4616;margin-top:0.5rem">Outlook &bull; SMTP &bull; IMAP</span>
+                    <div class="flip-back" style="background:linear-gradient(135deg,rgba(250,70,22,0.12),rgba(15,23,42,0.97));border:1px solid rgba(250,70,22,0.3)">
+                        <span style="font-size:2.2rem">&#128140;</span>
+                        <span class="back-company" style="background:rgba(250,70,22,0.15);color:#FA4616">JPMorgan Chase</span>
+                        <span class="flip-tag" style="color:#FA4616">Outlook · Orchestrator · Cron</span>
                     </div>
                 </div>
             </div>
 
-            <div class="flip-card">
-                <div class="flip-inner">
-                    <div class="flip-front" style="border-color:rgba(248,113,113,0.25)">
-                        <span style="font-size:2rem">&#128209;</span>
-                        <span class="fname">PDF Automation</span>
-                        <span class="flip-tag" style="color:#f87171">hover to explore</span>
-                    </div>
-                    <div class="flip-back" style="background:linear-gradient(135deg,rgba(248,113,113,0.15),rgba(30,41,59,0.95));border:1px solid rgba(248,113,113,0.3)">
-                        <div style="font-size:1.5rem;margin-bottom:0.5rem">&#128209;</div>
-                        Extracting structured data from PDFs using Document Understanding &amp; regex-based parsing
-                        <span class="flip-tag" style="color:#f87171;margin-top:0.5rem">Doc Understanding &bull; OCR</span>
-                    </div>
-                </div>
-            </div>
-
+            <!-- SAP -->
             <div class="flip-card">
                 <div class="flip-inner">
                     <div class="flip-front" style="border-color:rgba(250,204,21,0.25)">
@@ -305,14 +322,15 @@
                         <span class="fname">SAP Automation</span>
                         <span class="flip-tag" style="color:#facc15">hover to explore</span>
                     </div>
-                    <div class="flip-back" style="background:linear-gradient(135deg,rgba(250,204,21,0.15),rgba(30,41,59,0.95));border:1px solid rgba(250,204,21,0.3)">
-                        <div style="font-size:1.5rem;margin-bottom:0.5rem">&#128187;</div>
-                        End-to-end SAP GUI automation for data entry, report extraction &amp; transaction processing
-                        <span class="flip-tag" style="color:#facc15;margin-top:0.5rem">SAP GUI &bull; Scripting API</span>
+                    <div class="flip-back" style="background:linear-gradient(135deg,rgba(250,204,21,0.12),rgba(15,23,42,0.97));border:1px solid rgba(250,204,21,0.3)">
+                        <span style="font-size:2.2rem">&#128187;</span>
+                        <span class="back-company" style="background:rgba(250,204,21,0.15);color:#facc15">Worldline</span>
+                        <span class="flip-tag" style="color:#facc15">SAP GUI · Scripting API</span>
                     </div>
                 </div>
             </div>
 
+            <!-- CITRIX -->
             <div class="flip-card">
                 <div class="flip-inner">
                     <div class="flip-front" style="border-color:rgba(168,85,247,0.25)">
@@ -320,29 +338,15 @@
                         <span class="fname">Citrix Automation</span>
                         <span class="flip-tag" style="color:#a855f7">hover to explore</span>
                     </div>
-                    <div class="flip-back" style="background:linear-gradient(135deg,rgba(168,85,247,0.15),rgba(30,41,59,0.95));border:1px solid rgba(168,85,247,0.3)">
-                        <div style="font-size:1.5rem;margin-bottom:0.5rem">&#128274;</div>
-                        Automating virtual desktop environments using Computer Vision &amp; image-based selectors
-                        <span class="flip-tag" style="color:#a855f7;margin-top:0.5rem">CV Activities &bull; Native Citrix</span>
+                    <div class="flip-back" style="background:linear-gradient(135deg,rgba(168,85,247,0.12),rgba(15,23,42,0.97));border:1px solid rgba(168,85,247,0.3)">
+                        <span style="font-size:2.2rem">&#128274;</span>
+                        <span class="back-company" style="background:rgba(168,85,247,0.15);color:#a855f7">Worldline</span>
+                        <span class="flip-tag" style="color:#a855f7">CV Activities · Native Citrix</span>
                     </div>
                 </div>
             </div>
 
-            <div class="flip-card">
-                <div class="flip-inner">
-                    <div class="flip-front" style="border-color:rgba(244,114,182,0.25)">
-                        <span style="font-size:2rem">&#128268;</span>
-                        <span class="fname">API Automation</span>
-                        <span class="flip-tag" style="color:#f472b6">hover to explore</span>
-                    </div>
-                    <div class="flip-back" style="background:linear-gradient(135deg,rgba(244,114,182,0.15),rgba(30,41,59,0.95));border:1px solid rgba(244,114,182,0.3)">
-                        <div style="font-size:1.5rem;margin-bottom:0.5rem">&#128268;</div>
-                        REST &amp; SOAP API integration using HTTP activities, JSON serialization &amp; OAuth token handling
-                        <span class="flip-tag" style="color:#f472b6;margin-top:0.5rem">REST &bull; SOAP &bull; OAuth</span>
-                    </div>
-                </div>
-            </div>
-
+            <!-- DESKTOP -->
             <div class="flip-card">
                 <div class="flip-inner">
                     <div class="flip-front" style="border-color:rgba(251,146,60,0.25)">
@@ -350,14 +354,15 @@
                         <span class="fname">Desktop Automation</span>
                         <span class="flip-tag" style="color:#fb923c">hover to explore</span>
                     </div>
-                    <div class="flip-back" style="background:linear-gradient(135deg,rgba(251,146,60,0.15),rgba(30,41,59,0.95));border:1px solid rgba(251,146,60,0.3)">
-                        <div style="font-size:1.5rem;margin-bottom:0.5rem">&#128421;</div>
-                        Automating legacy Windows apps with UiPath's UI Automation framework &amp; fallback strategies
-                        <span class="flip-tag" style="color:#fb923c;margin-top:0.5rem">WinAPI &bull; UI Automation</span>
+                    <div class="flip-back" style="background:linear-gradient(135deg,rgba(251,146,60,0.12),rgba(15,23,42,0.97));border:1px solid rgba(251,146,60,0.3)">
+                        <span style="font-size:2.2rem">&#128421;</span>
+                        <span class="back-company" style="background:rgba(251,146,60,0.15);color:#fb923c">Worldline</span>
+                        <span class="flip-tag" style="color:#fb923c">WinAPI · UI Automation</span>
                     </div>
                 </div>
             </div>
 
+            <!-- SCREEN SCRAPING -->
             <div class="flip-card">
                 <div class="flip-inner">
                     <div class="flip-front" style="border-color:rgba(45,212,191,0.25)">
@@ -365,10 +370,42 @@
                         <span class="fname">Screen Scraping</span>
                         <span class="flip-tag" style="color:#2dd4bf">hover to explore</span>
                     </div>
-                    <div class="flip-back" style="background:linear-gradient(135deg,rgba(45,212,191,0.15),rgba(30,41,59,0.95));border:1px solid rgba(45,212,191,0.3)">
-                        <div style="font-size:1.5rem;margin-bottom:0.5rem">&#128247;</div>
-                        Extracting structured data from web &amp; desktop apps using scraping wizards &amp; table extraction
-                        <span class="flip-tag" style="color:#2dd4bf;margin-top:0.5rem">Data Scraping &bull; Table Extract</span>
+                    <div class="flip-back" style="background:linear-gradient(135deg,rgba(45,212,191,0.12),rgba(15,23,42,0.97));border:1px solid rgba(45,212,191,0.3)">
+                        <span style="font-size:2.2rem">&#128247;</span>
+                        <span class="back-company" style="background:rgba(45,212,191,0.15);color:#2dd4bf">Worldline</span>
+                        <span class="flip-tag" style="color:#2dd4bf">Data Scraping · Table Extract</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API AUTOMATION -->
+            <div class="flip-card">
+                <div class="flip-inner">
+                    <div class="flip-front" style="border-color:rgba(244,114,182,0.25)">
+                        <span style="font-size:2rem">&#128268;</span>
+                        <span class="fname">API Automation</span>
+                        <span class="flip-tag" style="color:#f472b6">hover to explore</span>
+                    </div>
+                    <div class="flip-back" style="background:linear-gradient(135deg,rgba(244,114,182,0.12),rgba(15,23,42,0.97));border:1px solid rgba(244,114,182,0.3)">
+                        <span style="font-size:2.2rem">&#128268;</span>
+                        <span class="back-company" style="background:rgba(244,114,182,0.15);color:#f472b6">Worldline</span>
+                        <span class="flip-tag" style="color:#f472b6">REST · HTTP Activities · OAuth</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PDF AUTOMATION -->
+            <div class="flip-card">
+                <div class="flip-inner">
+                    <div class="flip-front" style="border-color:rgba(248,113,113,0.25)">
+                        <span style="font-size:2rem">&#128209;</span>
+                        <span class="fname">PDF Automation</span>
+                        <span class="flip-tag" style="color:#f87171">hover to explore</span>
+                    </div>
+                    <div class="flip-back" style="background:linear-gradient(135deg,rgba(248,113,113,0.12),rgba(15,23,42,0.97));border:1px solid rgba(248,113,113,0.3)">
+                        <span style="font-size:2.2rem">&#128209;</span>
+                        <span class="back-company" style="background:rgba(248,113,113,0.15);color:#f87171">JPMorgan Chase</span>
+                        <span class="flip-tag" style="color:#f87171">Doc Understanding · OCR</span>
                     </div>
                 </div>
             </div>
@@ -396,7 +433,11 @@
                     </div>
                     <h3 style="font-weight:700;color:white;font-size:1.15rem;margin-bottom:0.25rem">Intern — Python Automation</h3>
                     <h4 style="color:#64748b;font-weight:500;margin-bottom:0.75rem;font-size:0.9rem">Simeio Solutions</h4>
-                    <p style="font-size:0.875rem;color:#cbd5e1;line-height:1.75">Built Python-based automation for Excel processing using openpyxl, developed Excel-to-JSON transformation pipelines, and automated multi-environment deployments using Ansible.</p>
+                    <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.5rem">
+                        <li style="font-size:0.875rem;color:#cbd5e1;line-height:1.7;padding-left:1rem;position:relative"><span style="position:absolute;left:0;color:#FA4616">▸</span>Built Python automation scripts for validation, transformation and bulk uploads, saving 10 hours of manual processing per week.</li>
+                        <li style="font-size:0.875rem;color:#cbd5e1;line-height:1.7;padding-left:1rem;position:relative"><span style="position:absolute;left:0;color:#FA4616">▸</span>Developed reusable Ansible playbooks for server configuration and application releases, enabling consistent repeatable deployments.</li>
+                        <li style="font-size:0.875rem;color:#cbd5e1;line-height:1.7;padding-left:1rem;position:relative"><span style="position:absolute;left:0;color:#FA4616">▸</span>Validated security tool API integrations in Postman, verifying authentication flows and confirming expected data outputs after endpoint changes.</li>
+                    </ul>
                 </div>
             </div>
 
@@ -408,7 +449,11 @@
                     </div>
                     <h3 style="font-weight:700;color:white;font-size:1.15rem;margin-bottom:0.25rem">Software Engineer — RPA UiPath Developer</h3>
                     <h4 style="color:#64748b;font-weight:500;margin-bottom:0.75rem;font-size:0.9rem">JPMorgan Chase &amp; Co</h4>
-                    <p style="font-size:0.875rem;color:#cbd5e1;line-height:1.75">Led the migration from Automation Anywhere to UiPath, implemented the Dispatcher-Performer framework, and used Jenkins for automated deployment across environments.</p>
+                    <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.5rem">
+                        <li style="font-size:0.875rem;color:#cbd5e1;line-height:1.7;padding-left:1rem;position:relative"><span style="position:absolute;left:0;color:#38BDF8">▸</span>Migrated 3 major processes from Automation Anywhere to UiPath, redesigning workflows and validating functional parity to ensure stable post-migration performance.</li>
+                        <li style="font-size:0.875rem;color:#cbd5e1;line-height:1.7;padding-left:1rem;position:relative"><span style="position:absolute;left:0;color:#38BDF8">▸</span>Engineered Dispatcher and Performer workflows in REFramework, improving bot reliability and enabling structured end-to-end execution across all automated processes.</li>
+                        <li style="font-size:0.875rem;color:#cbd5e1;line-height:1.7;padding-left:1rem;position:relative"><span style="position:absolute;left:0;color:#38BDF8">▸</span>Deployed 10+ UiPath NuGet packages across UAT and production via a Jenkins CI/CD pipeline, keeping releases aligned with SDLC standards.</li>
+                    </ul>
                 </div>
             </div>
 
@@ -420,7 +465,11 @@
                     </div>
                     <h3 style="font-weight:700;color:white;font-size:1.15rem;margin-bottom:0.25rem">Application Engineer — RPA UiPath Developer</h3>
                     <h4 style="color:#64748b;font-weight:500;margin-bottom:0.75rem;font-size:0.9rem">Worldline Pvt Ltd</h4>
-                    <p style="font-size:0.875rem;color:#cbd5e1;line-height:1.75">Delivered 13+ enterprise automation solutions, worked with REFramework across SAP &amp; Web environments, and automated email processing &amp; data scraping workflows.</p>
+                    <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.5rem">
+                        <li style="font-size:0.875rem;color:#cbd5e1;line-height:1.7;padding-left:1rem;position:relative"><span style="position:absolute;left:0;color:#a855f7">▸</span>Delivered 13 production-ready RPA bots and served as sole support owner, monitoring bot health in Orchestrator and resolving failures to maintain uninterrupted operations.</li>
+                        <li style="font-size:0.875rem;color:#cbd5e1;line-height:1.7;padding-left:1rem;position:relative"><span style="position:absolute;left:0;color:#a855f7">▸</span>Improved bot performance across multiple processes, reducing processing time by up to 3 hours per run and cutting the exception rate by around 30 percent.</li>
+                        <li style="font-size:0.875rem;color:#cbd5e1;line-height:1.7;padding-left:1rem;position:relative"><span style="position:absolute;left:0;color:#a855f7">▸</span>Resolved a critical production failure by tracing Orchestrator logs to a folder selector mismatch across 25 client paths, restoring full execution within 2 hours.</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -560,7 +609,6 @@
 <script>
     emailjs.init("9YHXyrXrRjCPoVf3W");
 
-    /* ---------- NAV SCROLL ---------- */
     window.addEventListener('scroll', function() {
         var nav = document.getElementById('navbar');
         if (window.scrollY > 50) {
@@ -574,49 +622,32 @@
         }
     });
 
-    /* ---------- SMOOTH SCROLL ---------- */
     function goTo(id) {
         var el = document.getElementById(id);
         if (el) el.scrollIntoView({ behavior: 'smooth' });
     }
 
-    /* ---------- TYPEWRITER ---------- */
     var twWords = ['UiPath Certified Professional', 'UiPath Developer', 'Automation Engineer', 'Bot Builder', 'RPA Developer', 'Software Engineer', 'Problem Solver'];
-    var twIndex = 0;
-    var twCharIndex = 0;
-    var twDeleting = false;
-
+    var twIndex = 0, twCharIndex = 0, twDeleting = false;
     function type() {
         var el = document.getElementById('typewriter');
         if (!el) return;
         var currentWord = twWords[twIndex];
-
         if (!twDeleting) {
             twCharIndex++;
             el.textContent = currentWord.slice(0, twCharIndex);
-            if (twCharIndex === currentWord.length) {
-                twDeleting = true;
-                setTimeout(type, 2000);
-                return;
-            }
+            if (twCharIndex === currentWord.length) { twDeleting = true; setTimeout(type, 2000); return; }
             setTimeout(type, 110);
         } else {
             twCharIndex--;
             el.textContent = currentWord.slice(0, twCharIndex);
-            if (twCharIndex === 0) {
-                twDeleting = false;
-                twIndex = (twIndex + 1) % twWords.length;
-                setTimeout(type, 400);
-                return;
-            }
+            if (twCharIndex === 0) { twDeleting = false; twIndex = (twIndex + 1) % twWords.length; setTimeout(type, 400); return; }
             setTimeout(type, 55);
         }
     }
     setTimeout(type, 800);
 
-    /* ---------- COUNTERS — fires when stats section scrolls into view ---------- */
     var countersFired = false;
-
     function runCount(id, target, duration) {
         var el = document.getElementById(id);
         if (!el) return;
@@ -625,18 +656,12 @@
             if (!start) start = ts;
             var elapsed = ts - start;
             var progress = Math.min(elapsed / duration, 1);
-            // ease out quart — starts fast, slows down at the end
             var eased = 1 - Math.pow(1 - progress, 4);
             el.textContent = Math.floor(eased * target);
-            if (progress < 1) {
-                requestAnimationFrame(tick);
-            } else {
-                el.textContent = target;
-            }
+            if (progress < 1) { requestAnimationFrame(tick); } else { el.textContent = target; }
         }
         requestAnimationFrame(tick);
     }
-
     function fireCounters() {
         if (countersFired) return;
         var section = document.getElementById('stats');
@@ -646,15 +671,12 @@
             countersFired = true;
             runCount('c1', 20, 2500);
             runCount('c2', 15, 2500);
-            runCount('c3', 3,  2000);
+            runCount('c3', 3, 2000);
         }
     }
-
     window.addEventListener('scroll', fireCounters, { passive: true });
-    // also check once on load in case stats are already visible
     setTimeout(fireCounters, 300);
 
-    /* ---------- SKILL BARS ---------- */
     var skillsDone = false;
     function fireSkills() {
         if (skillsDone) return;
@@ -670,13 +692,11 @@
     window.addEventListener('scroll', fireSkills, { passive: true });
     setTimeout(fireSkills, 800);
 
-    /* ---------- GSAP REVEAL ---------- */
     gsap.registerPlugin(ScrollTrigger);
     document.querySelectorAll('.gs-reveal').forEach(function(el) {
         gsap.from(el, { y: 40, opacity: 0, duration: 0.8, scrollTrigger: { trigger: el, start: 'top 88%' } });
     });
 
-    /* ---------- MODAL ---------- */
     function openModal() {
         var modal = document.getElementById('hireModal');
         modal.classList.add('active');
@@ -696,7 +716,6 @@
     });
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
 
-    /* ---------- COPY ---------- */
     function copyNumber() {
         navigator.clipboard.writeText('416-821-8027').then(function() {
             var l = document.getElementById('copyLabel');
@@ -712,13 +731,12 @@
         });
     }
 
-    /* ---------- EMAIL ---------- */
     function sendEmail() {
-        var email   = document.getElementById('femail').value.trim();
+        var email = document.getElementById('femail').value.trim();
         var subject = document.getElementById('fsubject').value.trim();
-        var body    = document.getElementById('fmessage').value.trim();
-        var status  = document.getElementById('formStatus');
-        var btn     = document.getElementById('sendBtn');
+        var body = document.getElementById('fmessage').value.trim();
+        var status = document.getElementById('formStatus');
+        var btn = document.getElementById('sendBtn');
         status.style.display = 'none';
         if (!email || !subject || !body) {
             status.textContent = 'Please fill in all fields.';
